@@ -1,8 +1,9 @@
 # fosfo
 Libraire javascript pour jeu vidéo avec canvas
 <br>
-<h2>Documentation :</h2><br><br>
+<h2>Documentation :</h2><br>
 
+<h3>function loadimage(url) :</h3>
 <code>fosfo.loadimage("one_url");</code>
 <br>
 <code>fosfo.loadimage(["one_url", "seconde_url"]);</code>
