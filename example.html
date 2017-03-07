@@ -1,0 +1,90 @@
+<script src="./libs/lodash.min.js"></script>
+<!--lodash is a librarie for iterate images-->
+
+<script src="./fosfo.js"></script>
+
+<canvas id="cv" width="1708" height="557" style=""></canvas>
+
+<script>
+var cv;
+var fosfo;
+
+//for resize canvas
+var resize = function()
+{
+	cv.width = window.innerWidth;
+	cv.height = window.innerHeight;
+};
+
+var updateImages = function()
+{
+	///example animation :
+	animation();
+	animation2();
+	
+	//update yours placed images with frame rate fosfo.fps (default:60fps);
+	fosfo.update();
+};
+
+var count2 = 0;
+var x = 0;
+
+var animation2 = function()
+{
+	fosfo.undraw("chatonx");
+	fosfo.drawframe("chatonx", 'niam.png', anims[count2], x, 50);
+	x += 5;
+	count2++;
+	if (count2 >= anims.length)
+		count2 = 0;
+	if (x > fosfo.canvas.width)
+		x = 0;
+};
+
+var anims = [6, 7, 8, 9, 10, 11];
+var count = 0;
+
+var animation = function()
+{
+	//undraw remove old image
+	fosfo.undraw("chatonfou");
+	
+	fosfo.drawframe("chatonfou", 'niam.png', anims[count], 35, 30);
+	count++;
+	if (count >= anims.length)
+		count = 0;
+};
+
+//start your game
+var start = function()
+{
+	//set your function for print yours images to rate fosfo.fps
+	setInterval(updateImages, fosfo.fps);
+	//indic special image frame here 6/4 images/png
+	fosfo.setFramesToImg('niam.png', 6, 4);
+	fosfo.setFramesToImg('niam2.png', 6, 4);
+	
+	//printone frame :p
+	//drawframe(name, url, frameid, x, y, ...);
+	fosfo.drawframe("chatonrayer", 'niam2.png', 6, 10, 10);
+	//the chatonrayer is printed on updateImages with rate fosfo.fps
+};
+
+var preload = function()
+{
+	cv = document.getElementById("cv");
+	window.addEventListener('resize', resize, false);
+	resize();
+	
+	//construct fosfo
+	fosfo = new fosfo(cv);
+	
+	//preload your Images, on load complete goto function start
+	fosfo.loadimage(['niam.png', 'niam2.png']).done(start);
+};
+
+window.addEventListener("DOMContentLoaded", function()
+{
+	preload();
+}, false);
+</script>
