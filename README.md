@@ -1,5 +1,5 @@
 # fosfo
-Libraire javascript pour jeu vidéo avec canvas
+Librairie javascript pour jeu vidéo avec canvas
 <br>
 <h2>Documentation :</h2><br>
 
