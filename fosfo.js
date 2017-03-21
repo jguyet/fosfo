@@ -4,19 +4,22 @@ var fosfo = function(canvas)
 	this.ctx = canvas.getContext("2d");
 	this.images = [];
 	this.imagesDrawed = [];
+	this.textDrawed = [];
 	this.fps = 60;
-	
+
 	this.loadimage = function(urls)
 	{
 		var loadedimages=0;
 		var postaction=function(){};
 		var urls = (typeof urls != "object") ? [urls] : urls;
 		var tmp = this;
+		
 		function imageloadpost()
 		{
 			loadedimages++;
-			if (loadedimages==urls.length){
-				postaction(tmp.images);
+			if (loadedimages==urls.length)
+			{
+				postaction(urls);
 			}
 		}
 		for (var i=0; i < urls.length; i++)
@@ -29,16 +32,16 @@ var fosfo = function(canvas)
 			im.url = urls[i];
 			im.onload = function()
 			{
-				console.log("IMG " + this.url + " loaded.");
 				var ddd = _.find(tmp.images, { 'url': this.url });
 				ddd.isloaded = true;
 				ddd.width = this.width;
 				ddd.height = this.height;
+				console.log((loadedimages + 1) + "/" + urls.length + " resource='" + this.url + "' loaded");
 				imageloadpost();
 			}
 			im.onerror = function()
 			{
-				imageloadpost()
+				imageloadpost();
 			}
 		}
 		return {
@@ -134,6 +137,12 @@ var fosfo = function(canvas)
 	{
 		dup = typeof dup !== 'undefined' ? dup : [];
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		this.update_drawed_img(dup);
+		this.update_drawed_text(dup);
+	}
+
+	this.update_drawed_img = function(dup)
+	{
 		var tmp = this;
 		_.forEach(this.imagesDrawed, function(value) {
 				if (value.rotate != null)
@@ -173,6 +182,14 @@ var fosfo = function(canvas)
 	this.undraw = function(name)
 	{
 		var img = _.find(this.imagesDrawed, { 'name': name });
+		var text = _.find(this.textDrawed, { 'name': name });
+		if (text != null)
+		{
+			this.ctx.clearRect(text.x, text.y, text.width, text.height);
+			this.textDrawed.splice(this.textDrawed.indexOf(text), 1);
+			if (img == null)
+				return ;
+		}
 		if (img == null)
 		{
 			var tmp = this;
@@ -183,18 +200,51 @@ var fosfo = function(canvas)
 		this.imagesDrawed.splice(this.imagesDrawed.indexOf(img), 1);
 	}
 	
-	this.getelementPos = function(x, y)
+	this.getelementPos = function(x, y, imgnothing)
 	{
 		x += 10;
-		for (var i = 0; i < this.imagesDrawed.length; i++)
+		imgnothing = typeof imgnothing !== 'undefined' ? imgnothing : [];
+		for (var i = (this.imagesDrawed.length - 1); i >= 0; i--)
 		{
 			if (x > this.imagesDrawed[i].x && x < (this.imagesDrawed[i].x + this.imagesDrawed[i].width)
 				&& y > this.imagesDrawed[i].y && y < (this.imagesDrawed[i].y + this.imagesDrawed[i].height))
 			{
+				if (_.find(imgnothing, { 'name': this.imagesDrawed[i].name }) != null)
+					continue ;
 				return (this.imagesDrawed[i]);
 			}
 		}
 		return (null);
+	}
+
+	this.drawtext = function(name, text, x, y, size, color, font)
+	{
+		font = typeof font !== 'undefined' ? font : "Arial";
+		size = typeof size !== 'undefined' ? size : 10;
+		color = typeof color !== 'undefined' ? color : "black";
+		var textdraw = {'name': name, 'text': text, 'x': x, 'y': y, 'size': size, 'color': color, 'font': font};
+		var clone = this.cloneObj(textdraw);
+		this.textDrawed.push(clone);
+	}
+
+	this.update_drawed_text = function(dup)
+	{
+		var tmp = this;
+		_.forEach(this.textDrawed, function(value) {
+
+			tmp.ctx.fillStyle = value.color;
+			tmp.ctx.font = value.size + "px " + value.font;
+			var metrics = tmp.ctx.measureText(value.text);
+			value.width = metrics.width;
+			value.height = metrics.height;
+			tmp.ctx.fillText(value.text, value.x, value.y);
+
+			_.forEach(dup, function(duplicat) {
+				tmp.ctx.fillStyle = value.color;
+				tmp.ctx.font = value.size + "px " + value.font;
+				tmp.ctx.fillText(value.text, value.x + duplicat[0], value.y + duplicat[1]);
+			});
+		});
 	}
 	
 	this.img = function()
