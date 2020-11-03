@@ -48,7 +48,7 @@ fosfo.loadimage(["./assets/niam.png", "./assets/niam2.png"]).done(() => {
 ##### Exemple :
 
 ###### Asset de reference :
-<img src="./assets/miam.png"/><br>
+<img src="./assets/niam.png"/><br>
 
 ````
 let canvas = document.getElementById("cv");
