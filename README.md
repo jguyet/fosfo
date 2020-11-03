@@ -2,7 +2,7 @@
 Petite Librairie javascript pour jeu vidéo avec canvas
 <br>
 <h2>Presentation :</h2>
-![img](./img.gif)
+<img src="./img.gif"/>
 <br>
 <h2>Documentation :</h2><br>
 
