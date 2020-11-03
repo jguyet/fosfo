@@ -4,6 +4,8 @@ Petite Librairie javascript pour créer des jeux vidéo en canvas
 <h2>Presentation :</h2>
 <img src="./img.gif"/>
 <br>
+<h2>Installation :</h2><br>
+<pre><script src="./fosfo.js"></script></pre><br>
 <h2>Documentation :</h2><br>
 <h3>function loadimage(url) :</h3>
 fosfo.loadimage preload vos images avant de démarrer votre programme ou jeu.
