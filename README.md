@@ -33,9 +33,6 @@ fosfo.loadimage(["./assets/niam.png", "./assets/niam2.png"]).done(() => {
 `fosfo.draw` permet d'ajouter une image sur le canvas
 ##### Exemple :
 
-###### Asset de reference :
-<img src="./img/img.gif"/><br>
-
 ````
 let canvas = document.getElementById("cv");
 let fosfo = new Fosfo(canvas);
@@ -51,7 +48,7 @@ fosfo.loadimage(["./assets/niam.png", "./assets/niam2.png"]).done(() => {
 ##### Exemple :
 
 ###### Asset de reference :
-<img src="./img/img.gif"/><br>
+<img src="./assets/miam.gif"/><br>
 
 ````
 let canvas = document.getElementById("cv");
