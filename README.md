@@ -2,7 +2,7 @@
 Petite Librairie javascript pour créer des jeux vidéo en canvas
 <br>
 <h2>Presentation :</h2>
-<img src="./img.gif"/>
+<img src="./img/img.gif"/>
 <br>
 <h2>Installation :</h2><br>
 <pre><script src="./fosfo.js"></script></pre><br>

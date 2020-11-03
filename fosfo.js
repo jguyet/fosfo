@@ -10,7 +10,7 @@ var fosfo = function(canvas)
     this.y = 0;
     
     this.addImage = function(key, im) {
-        var img = {'name': null, 'url': key, 'image': im, 'x': 0, 'y': 0, 'isloaded': false, 'id': null, 'rotate': null};
+        let img = {'name': null, 'url': key, 'image': im, 'x': 0, 'y': 0, 'isloaded': false, 'id': null, 'rotate': null};
         img.isloaded = true;
         img.width = im.width;
         img.height = im.height;
@@ -19,44 +19,37 @@ var fosfo = function(canvas)
 	
 	this.loadimage = function(urls)
 	{
-		var loadedimages=0;
-		var postaction=function(){};
-		var urls = (typeof urls != "object") ? [urls] : urls;
-		var tmp = this;
-		function imageloadpost()
-		{
+		urls = (typeof urls != "object") ? [urls] : urls;
+		let loadedimages = 0;
+		let resultFunction = () => {};
+		const tmp = this;
+		const imageloadpost = () => {
 			loadedimages++;
-			if (loadedimages==urls.length){
-				postaction(tmp.images);
+			if (loadedimages == urls.length){
+				resultFunction(tmp.images);
 			}
 		}
-		for (var i=0; i < urls.length; i++)
+		for (let i=0; i < urls.length; i++)
 		{
-			var im = new Image();
-			im.src = urls[i];
-			var img = {'name': null, 'url': urls[i], 'image': im, 'x': 0, 'y': 0, 'isloaded': false, 'id': null, 'rotate': null};
-			this.images.push(img);
-			var tmp = this;
-			im.url = urls[i];
-			im.onload = function()
-			{
-				console.log("IMG " + this.url + " loaded.");
-				var ddd = tmp.images.filter(x => x.url == this.url)[0];
-				ddd.isloaded = true;
-				ddd.width = this.width;
-				ddd.height = this.height;
-				imageloadpost();
-			}
-			im.onerror = function()
-			{
-				imageloadpost()
-			}
+			this.addImage(urls[i].split("/").slice(-1)[0], (() => {
+				let im = new Image();
+				im.src = urls[i];
+				im.onload = function() {
+					console.log(`IMG ${this.src} loaded`);
+					var ddd = tmp.images.filter(x => x.url == this.src.split("/").slice(-1)[0])[0];
+					ddd.isloaded = true;
+					ddd.width = this.width;
+					ddd.height = this.height;
+					imageloadpost();
+				}
+				im.onerror = function() {
+					console.warn(`IMG ${this.src} not found`);
+					imageloadpost()
+				}
+				return im;
+			})());
 		}
-		return {
-			done:function(f){
-				postaction=f || postaction
-			}
-		}
+		return { done: (f) => resultFunction = f || resultFunction }
 	}
 	
 	this.clear = function()
