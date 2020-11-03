@@ -1,37 +1,109 @@
 # fosfo
 Petite Librairie javascript pour créer des jeux vidéo en canvas
-<br>
-<h2>Presentation :</h2>
+
+## Demo :
+example.html
 <img src="./img/img.gif"/>
-<br>
-<h2>Installation :</h2><br>
-<pre><script src="./fosfo.js"></script></pre><br>
-<h2>Documentation :</h2><br>
-<h3>function loadimage(url) :</h3>
-fosfo.loadimage preload vos images avant de démarrer votre programme ou jeu.
-<br>
-Un callback de retour et conceillier en utilisation pour attendre les chargements d'images
-<br>
-<br>
-Exemple :<br>
-<pre>
-fosfo.loadimage("niam.png");
-fosfo.loadimage(["niam.png", "niam2.png"]).done(() => {
+
+## Installation :
+
+````
+<html>
+<head>
+	<script src="./fosfo.js"></script>
+</head>
+<body></body>
+</html>
+````
+
+## Documentation :
+#### Preload images :
+`fosfo.loadimage` permet de charger vos images avant de démarrer votre programme.
+##### Exemple :
+````
+let canvas = document.getElementById("cv");
+let fosfo = new Fosfo(canvas);
+
+fosfo.loadimage(["./assets/niam.png", "./assets/niam2.png"]).done(() => {
     // chargement terminé
 });
-</pre>
-<br>
-<h3>function setFramesToImg(url, framewith, frameheight) :</h3>
-fosfo.setFramesToImg indique a l'image d'url qu'il y a plusieurs parties d'images,
-ce qui permet de pouvoir ensuite utilisé <b>fosfo.drawframe</b>.
-<br>
-url c'est l'url d'une image déja charger dans fosfo.
-<br>
-framewith correspond au nombre d'images en ligne.
-<br>
-frameheight correspond au nombre d'images sur la hauteur.
-<br>
-<br>
-Exemple :<br>
-<pre>fosfo.drawframe("niam.png", 6, 4);</pre><br>
+````
 
+#### Mon premier affichage :
+`fosfo.draw` permet d'ajouter une image sur le canvas
+##### Exemple :
+
+###### Asset de reference :
+<img src="./img/img.gif"/><br>
+
+````
+let canvas = document.getElementById("cv");
+let fosfo = new Fosfo(canvas);
+
+fosfo.loadimage(["./assets/niam.png", "./assets/niam2.png"]).done(() => {
+    // chargement terminé
+	fosfo.draw("name", "miam.png", 50, 50); // fosfo.draw( nom, filename, x, y);
+});
+````
+
+#### Sprite animation :
+`fosfo.setFramesToImg` applique sur une image une grille de sprite qui permet l'usage de la fonction <b>fosfo.drawframe</b> pour afficher un sprite en particulier.
+##### Exemple :
+
+###### Asset de reference :
+<img src="./img/img.gif"/><br>
+
+````
+let canvas = document.getElementById("cv");
+let fosfo = new Fosfo(canvas);
+
+fosfo.loadimage(["./assets/niam.png", "./assets/niam2.png"]).done(() => {
+    // chargement terminé
+	fosfo.setFramesToImg('niam.png', 6, 4);
+	fosfo.drawframe("miam1", "niam.png", 6, 4);
+	
+});
+````
+
+#### Drawing loop :
+Loop d'affichage avec Fosfo
+##### Exemple :
+````
+let canvas = document.getElementById("cv");
+let fosfo = new Fosfo(canvas);
+
+let loopFunction = () => {
+	//TODO future code
+	fosfo.draw("name", "miam.png", 50, 50);
+};
+
+fosfo.loadimage(["./assets/niam.png", "./assets/niam2.png"]).done(() => {
+    // chargement terminé
+	setInterval(loopFunction, fosfo.fps / 1000); // appelle la fonction loopFunction 60 fois par seconde par defaut.
+});
+````
+
+#### Drawing loop avec deplacement & sprite animation :
+Loop d'affichage avec Fosfo
+##### Exemple :
+````
+let canvas = document.getElementById("cv");
+let fosfo = new Fosfo(canvas);
+let count = 0;
+
+let loopFunction = () => {
+	//TODO future code
+	let anims = [6, 7, 8, 9, 10, 11];
+	
+	fosfo.undraw("chatonfou");
+	fosfo.drawframe("chatonfou", 'niam.png', anims[count], 250, 60);
+	
+	count += 1;
+	if (count >= anims.length) count = 0;
+};
+
+fosfo.loadimage(["./assets/niam.png", "./assets/niam2.png"]).done(() => {
+    // chargement terminé
+	setInterval(loopFunction, fosfo.fps / 1000); // appelle la fonction loopFunction 60 fois par seconde par defaut.
+});
+````
