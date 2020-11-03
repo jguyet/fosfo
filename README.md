@@ -1,5 +1,7 @@
 # fosfo
-Librairie javascript pour jeu vidéo avec canvas
+Petite Librairie javascript pour jeu vidéo avec canvas
+<br>
+<h2>Presentation :</h2>
 <br>
 <h2>Documentation :</h2><br>
 

@@ -6,20 +6,28 @@ var fosfo = function(canvas)
 	this.imagesDrawed = [];
 	this.textDrawed = [];
 	this.fps = 60;
-
+	this.x = 0;
+    this.y = 0;
+    
+    this.addImage = function(key, im) {
+        var img = {'name': null, 'url': key, 'image': im, 'x': 0, 'y': 0, 'isloaded': false, 'id': null, 'rotate': null};
+        img.isloaded = true;
+        img.width = im.width;
+        img.height = im.height;
+        this.images.push(img);
+    }
+	
 	this.loadimage = function(urls)
 	{
 		var loadedimages=0;
 		var postaction=function(){};
 		var urls = (typeof urls != "object") ? [urls] : urls;
 		var tmp = this;
-		
 		function imageloadpost()
 		{
 			loadedimages++;
-			if (loadedimages==urls.length)
-			{
-				postaction(urls);
+			if (loadedimages==urls.length){
+				postaction(tmp.images);
 			}
 		}
 		for (var i=0; i < urls.length; i++)
@@ -32,16 +40,16 @@ var fosfo = function(canvas)
 			im.url = urls[i];
 			im.onload = function()
 			{
-				var ddd = _.find(tmp.images, { 'url': this.url });
+				console.log("IMG " + this.url + " loaded.");
+				var ddd = tmp.images.filter(x => x.url == this.url)[0];
 				ddd.isloaded = true;
 				ddd.width = this.width;
 				ddd.height = this.height;
-				console.log((loadedimages + 1) + "/" + urls.length + " resource='" + this.url + "' loaded");
 				imageloadpost();
 			}
 			im.onerror = function()
 			{
-				imageloadpost();
+				imageloadpost()
 			}
 		}
 		return {
@@ -59,8 +67,8 @@ var fosfo = function(canvas)
 	
 	this.setFramesToImg = function(url, fw, fh)
 	{
-		var img = _.find(this.images, { 'url': url });
-		if (img == null)
+		var img = this.images.filter(x => x.url == url)[0];
+		if (img == undefined)
 			return (null);
 		img.fw = fw;
 		img.fh = fh;
@@ -69,8 +77,8 @@ var fosfo = function(canvas)
 	
 	this.drawframe = function(name, url, id, dx, dy, dLargeur, dHauteur, drotate)
 	{
-		var img = _.find(this.images, { 'url': url });
-		if (img == null)
+		var img = this.images.filter(x => x.url == url)[0];
+		if (img == undefined)
 			return ;
 		if (img.isloaded == false)
 		{
@@ -104,8 +112,8 @@ var fosfo = function(canvas)
 	//void ctx.drawImage(image, sx, sy, sLargeur, sHauteur, dx, dy, dLargeur, dHauteur);
 	this.draw = function(name, url, dx, dy, dLargeur, dHauteur, sx = 0, sy = 0, sLargeur, sHauteur, drotate)
 	{
-		var img = _.find(this.images, { 'url': url });
-		if (img == null)
+		var img = this.images.filter(x => x.url == url)[0];
+		if (img == undefined)
 		{
 			console.log("IMG " + url + " == null.");
 			img = this.loadimage(url);
@@ -133,90 +141,97 @@ var fosfo = function(canvas)
 		return (onctx);
 	};
 	
-	this.update = function (dup)
+	this.update = function ()
 	{
-		dup = typeof dup !== 'undefined' ? dup : [];
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		this.update_drawed_img(dup);
-		this.update_drawed_text(dup);
-	}
-
-	this.update_drawed_img = function(dup)
-	{
 		var tmp = this;
-		_.forEach(this.imagesDrawed, function(value) {
-				if (value.rotate != null)
-				{
-					tmp.updaterotate(dup, value);
-				}
-				else
-				{
-					tmp.ctx.drawImage(value.image, value.sx, value.sy, value.sLargeur,
-						value.sHauteur, value.x, value.y, value.width, value.height);
-					_.forEach(dup, function(duplicat) {
-						tmp.ctx.drawImage(value.image, value.sx, value.sy, value.sLargeur,
-							value.sHauteur, value.x + duplicat[0], value.y + duplicat[1], value.width, value.height);
-					});
-				}
+		this.imagesDrawed.forEach(function(value) {
+			if (value.rotate != null)
+			{
+				tmp.updaterotate(value);
+			}
+			else
+			{
+				tmp.ctx.drawImage(value.image, value.sx, value.sy, value.sLargeur,
+					value.sHauteur, tmp.x + value.x, (tmp.y + value.y), value.width, value.height);
+			}
 		});
+		this.update_drawed_text();
 	}
 	
-	this.updaterotate = function (dup, value)
+	this.updaterotate = function (value)
 	{
-		dup = typeof dup !== 'undefined' ? dup : [];
+		const rad = value.rotate * Math.PI / 180 || 0;
+		
 		this.ctx.save();
-		this.ctx.translate(value.x, value.y);
-		this.ctx.rotate(value.rotate * (Math.PI/180));
-		this.ctx.drawImage(value.image, value.sx, value.sy, value.sLargeur, value.sHauteur, 0,  0, -(value.width), -(value.height));
+		// set to image center designed by v
+		// ------------------------
+		// -------o---o------------
+		// ---------v--------------
+		// -------o---o------------
+		// ------------------------
+		this.ctx.translate((value.width/2) + value.x, (value.height/2) + value.y);
+		this.ctx.rotate(rad); // rotate v to angle you want
+		// set to left top of image size designed by v
+		// ------------------------
+		// -------v---o------------
+		// ------------------------
+		// -------o---o------------
+		// ------------------------
+		this.ctx.translate(-(value.width/2), -(value.height/2));
+		this.ctx.drawImage(value.image, value.sx, value.sy, value.sLargeur, value.sHauteur, 0, 0, value.width, value.height);//draw image to v left top of image size
 		this.ctx.restore();
+	}
+	
+	this.undraw = function(names = [])
+	{
+		if (!Array.isArray(names)) {
+			names = [names];
+		}
 		var tmp = this;
-		_.forEach(dup, function(duplicat) {
-			tmp.ctx.save();
-			tmp.ctx.translate(value.x + duplicat[0], value.y + duplicat[1]);
-			tmp.ctx.rotate(value.rotate * (Math.PI/180));
-			tmp.ctx.drawImage(value.image, value.sx, value.sy, value.sLargeur, value.sHauteur, 0,  0, -(value.width), -(value.height));
-			tmp.ctx.restore();
+		names.forEach((name) => {
+			var img = tmp.imagesDrawed.filter(x => x.name == name)[0];
+			var text = tmp.textDrawed.filter(x => x.name == name)[0];
+			if (text != undefined)
+			{
+				tmp.ctx.clearRect(text.x, text.y, text.width, text.height);
+				tmp.textDrawed.splice(tmp.textDrawed.indexOf(text), 1);
+				if (img == undefined)
+					return ;
+			}
+			if (img == undefined)
+			{
+				setTimeout(function(){tmp.undraw(name);}, 2000);
+				return ;
+			}
+			tmp.ctx.clearRect(img.x, img.y, img.width, img.height);
+			tmp.imagesDrawed.splice(tmp.imagesDrawed.indexOf(img), 1);
 		});
 	}
 	
-	this.undraw = function(name)
+	this.undrawimg = function(img)
 	{
-		var img = _.find(this.imagesDrawed, { 'name': name });
-		var text = _.find(this.textDrawed, { 'name': name });
-		if (text != null)
-		{
-			this.ctx.clearRect(text.x, text.y, text.width, text.height);
-			this.textDrawed.splice(this.textDrawed.indexOf(text), 1);
-			if (img == null)
-				return ;
-		}
 		if (img == null)
 		{
-			var tmp = this;
-			setTimeout(function(){tmp.undraw(name);}, 2000);
 			return ;
 		}
 		this.ctx.clearRect(img.x, img.y, img.width, img.height);
 		this.imagesDrawed.splice(this.imagesDrawed.indexOf(img), 1);
 	}
 	
-	this.getelementPos = function(x, y, imgnothing)
+	this.getelementPos = function(x, y)
 	{
 		x += 10;
-		imgnothing = typeof imgnothing !== 'undefined' ? imgnothing : [];
-		for (var i = (this.imagesDrawed.length - 1); i >= 0; i--)
+		for (var i = 0; i < this.imagesDrawed.length; i++)
 		{
 			if (x > this.imagesDrawed[i].x && x < (this.imagesDrawed[i].x + this.imagesDrawed[i].width)
 				&& y > this.imagesDrawed[i].y && y < (this.imagesDrawed[i].y + this.imagesDrawed[i].height))
 			{
-				if (_.find(imgnothing, { 'name': this.imagesDrawed[i].name }) != null)
-					continue ;
 				return (this.imagesDrawed[i]);
 			}
 		}
 		return (null);
 	}
-
 	this.drawtext = function(name, text, x, y, size, color, font)
 	{
 		font = typeof font !== 'undefined' ? font : "Arial";
@@ -227,10 +242,10 @@ var fosfo = function(canvas)
 		this.textDrawed.push(clone);
 	}
 
-	this.update_drawed_text = function(dup)
+	this.update_drawed_text = function()
 	{
 		var tmp = this;
-		_.forEach(this.textDrawed, function(value) {
+		this.textDrawed.forEach(function (value) {
 
 			tmp.ctx.fillStyle = value.color;
 			tmp.ctx.font = value.size + "px " + value.font;
@@ -238,15 +253,8 @@ var fosfo = function(canvas)
 			value.width = metrics.width;
 			value.height = metrics.height;
 			tmp.ctx.fillText(value.text, value.x, value.y);
-
-			_.forEach(dup, function(duplicat) {
-				tmp.ctx.fillStyle = value.color;
-				tmp.ctx.font = value.size + "px " + value.font;
-				tmp.ctx.fillText(value.text, value.x + duplicat[0], value.y + duplicat[1]);
-			});
 		});
 	}
-	
 	this.img = function()
 	{
 		var image = new Image();
