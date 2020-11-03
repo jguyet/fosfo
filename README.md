@@ -5,7 +5,6 @@ Petite Librairie javascript pour créer des jeux vidéo en canvas
 <img src="./img.gif"/>
 <br>
 <h2>Documentation :</h2><br>
-
 <h3>function loadimage(url) :</h3>
 fosfo.loadimage preload vos images avant de démarrer votre programme ou jeu.
 <br>
@@ -13,12 +12,12 @@ Un callback de retour et conceillier en utilisation pour attendre les chargement
 <br>
 <br>
 Exemple :<br>
-<code>fosfo.loadimage("niam.png");</code><br>
-<code>fosfo.loadimage(["niam.png", "niam2.png"]).done(</code><br>
-<code>	function(){</code><br>
-<code>		//chargement terminé</code><br>
-<code>	}</code><br>
-<code>);</code>
+<pre>
+fosfo.loadimage("niam.png");
+fosfo.loadimage(["niam.png", "niam2.png"]).done(() => {
+    // chargement terminé
+});
+</pre>
 <br>
 <h3>function setFramesToImg(url, framewith, frameheight) :</h3>
 fosfo.setFramesToImg indique a l'image d'url qu'il y a plusieurs parties d'images,
@@ -32,5 +31,5 @@ frameheight correspond au nombre d'images sur la hauteur.
 <br>
 <br>
 Exemple :<br>
-<code>fosfo.drawframe("niam.png", 6, 4);</code><br>
+<pre>fosfo.drawframe("niam.png", 6, 4);</pre><br>
 
