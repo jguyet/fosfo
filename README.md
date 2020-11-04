@@ -109,7 +109,7 @@ fosfo.loadimage(["./assets/niam.png", "./assets/niam2.png"]).done(() => {
 });
 ````
 
-[npm-image]: https://img.shields.io/npm/v/samples.svg?style=flat-square
+[npm-image]: https://img.shields.io/npm/v/fosfo.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/fosfo
 [travis-image]: https://api.travis-ci.com/jguyet/fosfo.svg?branch=master
 [travis-url]: https://travis-ci.com/github/jguyet/fosfo
