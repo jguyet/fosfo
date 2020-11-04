@@ -1,6 +1,6 @@
 # fosfo
 [![NPM version][npm-image]][npm-url]
-[![build status][circle-image]][circle-url]
+[![build status][travis-image]][travis-url]
 [![license][license-image]][license-url]
 Petite Librairie javascript pour créer des jeux vidéo en canvas
 
