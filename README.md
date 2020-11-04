@@ -110,7 +110,7 @@ fosfo.loadimage(["./assets/niam.png", "./assets/niam2.png"]).done(() => {
 
 [npm-image]: https://img.shields.io/npm/v/samples.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/fosfo
-[travis-image]: https://travis-ci.org/jguyet/fosfo.svg?branch=master
-[travis-url]: https://travis-ci.org/jguyet/fosfo
+[travis-image]: https://api.travis-ci.com/jguyet/fosfo.svg?branch=master
+[travis-url]: https://travis-ci.com/github/jguyet/fosfo
 [license-image]: https://img.shields.io/npm/l/express.svg
 [license-url]: https://tldrlegal.com/license/mit-license
