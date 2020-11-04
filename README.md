@@ -20,6 +20,12 @@ example.html
 </html>
 ````
 
+or
+
+````
+npm install fosfo
+````
+
 ## Documentation :
 #### Preload images :
 `fosfo.loadimage` permet de charger vos images avant de démarrer votre programme.
