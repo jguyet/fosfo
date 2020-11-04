@@ -1,0 +1,29 @@
+{
+  "private": false,
+  "name": "fosfo",
+  "version": "0.0.1",
+  "homepage": "https://github.com/jguyet/fosfo",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jguyet/fosfo.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jguyet/fosfo/issues"
+  },
+  "author": "Guyet Jeremy <jguyet@linepicplus.com> (https://github.io/jguyet)",
+  "scripts": {},
+  "devDependencies": {},
+  "dependencies": {},
+  "description": "Petite Librairie javascript pour créer des jeux vidéo en canvas",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "canvas",
+    "sample",
+    "sprite",
+    "animation"
+  ]
+}
