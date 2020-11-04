@@ -2,6 +2,7 @@
 [![NPM version][npm-image]][npm-url]
 [![build status][travis-image]][travis-url]
 [![license][license-image]][license-url]
+
 Petite Librairie javascript pour créer des jeux vidéo en canvas
 
 ## Demo :
