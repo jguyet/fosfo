@@ -1,4 +1,4 @@
-var Fosfo = function(canvas)
+const Fosfo = function(canvas)
 {
 	this.canvas = canvas;
 	this.ctx = canvas.getContext("2d");
@@ -239,3 +239,8 @@ var Fosfo = function(canvas)
 		return copy;
 	}
 };
+
+// for use with npm package
+if (typeof(module) !== 'undefined') {
+	module.exports = Fosfo;
+}
