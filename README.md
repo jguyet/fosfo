@@ -3,6 +3,7 @@
 [![NPM version][npm-image]][npm-url]
 [![build status][travis-image]][travis-url]
 [![license][license-image]][license-url]
+[![Join the chat at https://gitter.im/fosfo0/community](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/fosfo0/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Petite Librairie javascript pour créer des jeux vidéo en canvas
 
@@ -26,7 +27,7 @@ Manually pure Javascript :
 With npm package manager :
 
 ````shell
-npm install fosfo
+$ npm install fosfo
 ````
 
 ````js
@@ -39,8 +40,8 @@ new Fosfo(canvas)
 With nodejs :
 
 ````shell
-npm install canvas
-npm install fosfo
+$ npm install canvas
+$ npm install fosfo
 ````
 
 ````js
