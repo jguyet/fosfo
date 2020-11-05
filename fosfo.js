@@ -17,7 +17,18 @@ const Fosfo = function(canvas)
         this.images[img.key] = img;
     }
 	
-	this.loadimage = function(urls) {
+	this.loadimage = function(urls, customImageLoader = (src) => {
+		return new Promise((resolve, reject) => {
+			let im = new Image();
+			im.src = src;
+			im.onload = function() {
+				resolve(im);
+			}
+			im.onerror = function() {
+				reject('file not found');
+			}
+		});
+	}) {
 		urls = (typeof urls != "object") ? [urls] : urls;
 		let loadedimages = 0;
 		let resultFunction = () => {};
@@ -30,23 +41,19 @@ const Fosfo = function(canvas)
 		}
 		for (let i=0; i < urls.length; i++)
 		{
-			this.addImage(urls[i].split("/").slice(-1)[0], (() => {
-				let im = new Image();
-				im.src = urls[i];
-				im.onload = function() {
-					console.log(`IMG ${this.src} loaded`);
-					var ddd = tmp.images[this.src.split("/").slice(-1)[0]];
-					ddd.isloaded = true;
-					ddd.width = this.width;
-					ddd.height = this.height;
-					imageloadpost();
-				}
-				im.onerror = function() {
-					console.warn(`IMG ${this.src} not found`);
-					imageloadpost()
-				}
-				return im;
-			})());
+			this.addImage(urls[i].split("/").slice(-1)[0], { width: 0, height: 0 });
+			customImageLoader(urls[i]).then((image) => {
+				console.log(`IMG ${image.src} loaded`);
+				var ddd = tmp.images[image.src.split("/").slice(-1)[0]];
+				ddd.isloaded = true;
+				ddd.width = image.width;
+				ddd.height = image.height;
+				ddd.image = image;
+				imageloadpost();
+			}).catch((error) => {
+				console.warn(`IMG ${urls[i]} not found ${error}`);
+				imageloadpost()
+			});
 		}
 		return { done: (f) => resultFunction = f || resultFunction }
 	}
@@ -201,6 +208,7 @@ const Fosfo = function(canvas)
 		}
 		return (null);
 	}
+	
 	this.drawtext = function(name, text, x, y, size, color, font) {
 		font = typeof font !== 'undefined' ? font : "Arial";
 		size = typeof size !== 'undefined' ? size : 10;
@@ -223,11 +231,8 @@ const Fosfo = function(canvas)
 			tmp.ctx.fillText(value.text, value.x, value.y);
 		});
 	}
-	this.img = function() {
-		let image = new Image();
-		image.id = "pic"
-		image.src = this.canvas.toDataURL();
-		return (image);
+	this.toDataURL = function() {
+		return this.canvas.toDataURL();
 	};
 	
 	this.cloneObj = function(obj) {
