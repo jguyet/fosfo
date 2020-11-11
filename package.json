@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "fosfo",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "homepage": "https://github.com/jguyet/fosfo",
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
   "scripts": {},
   "devDependencies": {},
   "dependencies": {},
-  "description": "Petite Librairie javascript pour créer des jeux vidéo en canvas",
+  "description": "Petite Librairie javascript pour créer des jeux vidéo en canvas | Small canvas painting library",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -24,6 +24,12 @@
     "canvas",
     "sample",
     "sprite",
-    "animation"
+    "animation",
+    "simple",
+    "tiny",
+    "jeux video js",
+    "js canvas",
+    "painting",
+    "canvas painting"
   ]
 }

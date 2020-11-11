@@ -5,7 +5,7 @@
 [![license][license-image]][license-url]
 [![Join the chat at https://gitter.im/fosfo0/community](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/fosfo0/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Petite Librairie javascript pour créer des jeux vidéo en canvas
+Petite Librairie javascript pour créer des jeux vidéo en canvas | Small canvas painting library
 
 ## Demo :
 example.html
@@ -13,8 +13,9 @@ example.html
 
 ## Installation :
 
-Manually pure Javascript :
+In Pure Javascript :
 
+import juste fosfo.js to your project directory
 ````html
 <html>
 <head>
