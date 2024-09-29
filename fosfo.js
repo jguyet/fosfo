@@ -41,10 +41,10 @@ const Fosfo = function(canvas)
 		}
 		for (let i=0; i < urls.length; i++)
 		{
-			this.addImage(urls[i].split("/").slice(-1)[0], { width: 0, height: 0 });
+			this.addImage(urls[i], { width: 0, height: 0 });
 			customImageLoader(urls[i]).then((image) => {
 				console.log(`IMG ${image.src} loaded`);
-				var ddd = tmp.images[image.src.split("/").slice(-1)[0]];
+				var ddd = tmp.images[image.src];
 				ddd.isloaded = true;
 				ddd.width = image.width;
 				ddd.height = image.height;
