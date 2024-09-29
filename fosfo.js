@@ -209,26 +209,25 @@ const Fosfo = function(canvas)
 		return (null);
 	}
 	
-	this.drawtext = function(name, text, x, y, size, color, font) {
+	this.drawtext = function(name, text, x, y, size, color, font, centred) {
 		font = typeof font !== 'undefined' ? font : "Arial";
 		size = typeof size !== 'undefined' ? size : 10;
 		color = typeof color !== 'undefined' ? color : "black";
-		let textdraw = {'name': name, 'text': text, 'x': x, 'y': y, 'size': size, 'color': color, 'font': font};
+		let textdraw = {'name': name, 'text': text, 'x': x, 'y': y, 'size': size, 'color': color, 'font': font, 'centred': centred};
 		let clone = this.cloneObj(textdraw);
 		this.textDrawed.push(clone);
 	}
 
 	this.update_drawed_text = function() {
 		const tmp = this;
-
 		this.textDrawed.forEach(function (value) {
-
 			tmp.ctx.fillStyle = value.color;
-			tmp.ctx.font = value.size + "px " + value.font;
+			tmp.ctx.font = (value.size * tmp.scale) + "px " + value.font;
 			const metrics = tmp.ctx.measureText(value.text);
 			value.width = metrics.width;
 			value.height = metrics.height;
-			tmp.ctx.fillText(value.text, value.x, value.y);
+			value.centerOfset = value.centred ? (value.width / 2) : 0;
+			tmp.ctx.fillText(value.text, ((tmp.x + value.x) * tmp.scale) - value.centerOfset, (tmp.y + value.y) * tmp.scale);
 		});
 	}
 	this.toDataURL = function() {
