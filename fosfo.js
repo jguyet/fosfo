@@ -7,7 +7,8 @@ const Fosfo = function(canvas)
 	this.textDrawed = [];
 	this.fps = 60;
 	this.x = 0;
-    this.y = 0;
+        this.y = 0;
+	this.scale = 1;
     
     this.addImage = function(key, im) {
         let img = {'name': null, 'key': key, 'image': im, 'x': 0, 'y': 0, 'isloaded': false, 'id': null, 'rotate': null};
@@ -225,11 +226,13 @@ const Fosfo = function(canvas)
 			tmp.ctx.font = (value.size * tmp.scale) + "px " + value.font;
 			const metrics = tmp.ctx.measureText(value.text);
 			value.width = metrics.width;
-			value.height = metrics.height;
+			value.height = metrics.height ?? metrics.emHeightAscent;
 			value.centerOfset = value.centred ? (value.width / 2) : 0;
-			tmp.ctx.fillText(value.text, ((tmp.x + value.x) * tmp.scale) - value.centerOfset, (tmp.y + value.y) * tmp.scale);
+			value.centerOfHeight = value.centred ? (value.height / 2) : 0;
+			tmp.ctx.fillText(value.text, ((tmp.x + value.x) * tmp.scale) - value.centerOfset, ((tmp.y + value.y) * tmp.scale) - value.centerOfHeight);
 		});
 	}
+	
 	this.toDataURL = function() {
 		return this.canvas.toDataURL();
 	};
