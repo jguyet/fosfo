@@ -234,6 +234,12 @@ const Fosfo = function(canvas)
 	this.toDataURL = function() {
 		return this.canvas.toDataURL();
 	};
+
+	this.toPngBuffer = function() {
+		const img = this.canvas.toDataURL('image/png');
+	        const data = img.replace(/^data:image\/\w+;base64,/, "");
+	        return Buffer.from(data, "base64");
+	};
 	
 	this.cloneObj = function(obj) {
 		if (null == obj || "object" != typeof obj) return obj;
